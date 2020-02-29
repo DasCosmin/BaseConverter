@@ -12,7 +12,11 @@ namespace Conversii
 {
     public partial class FormCalculator : Form
     {
+        public string[] possibleBases = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "16" };
+        public List<Button> buttons;
+
         private TextBox currentFocusedTextBox;
+        private string operation;
 
         /// <summary>
         /// The constructor of the FormCalculator class
@@ -21,8 +25,9 @@ namespace Conversii
         {
             InitializeComponent();
             currentFocusedTextBox = textBoxFirstBase;
+            buttons = new List<Button>{button0, button1, button2, button3, button4, button5, button6, button7, button8, button9,
+                buttonA, buttonB, buttonC, buttonD, buttonE, buttonF};
         }
-
 
         /// <summary>
         /// Function which closes the Application by pressing the Exit Button from the Title Bar
@@ -34,10 +39,12 @@ namespace Conversii
 
         /// <summary>
         /// Function which changes the currentFocusedTextBox to the textBoxFirstBase
+        /// and turns OFF the buttons corresponding to the hexadecimal digits. 
         /// </summary>
         private void textBoxFirstBase_Enter(object sender, EventArgs e)
         {
             currentFocusedTextBox = textBoxFirstBase;
+            turnONOFF_buttons(10);
         }
 
         /// <summary>
@@ -46,8 +53,9 @@ namespace Conversii
         private void button0_Click(object sender, EventArgs e)
         {
             if (currentFocusedTextBox.Text == "") return;
-            if (currentFocusedTextBox.Text.Length == 2) return;
             currentFocusedTextBox.Text += "0";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
         }
 
         /// <summary>
@@ -55,8 +63,18 @@ namespace Conversii
         /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (currentFocusedTextBox.Text.Length == 2) return;
             currentFocusedTextBox.Text += "1";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function that deletes the last character of a TextBox
+        /// </summary>
+        /// <param name="textBox">The TextBox to delete the last character for</param>
+        private void delete_last_charTextBox(TextBox textBox)
+        {
+            textBox.Text = textBox.Text.Remove(textBox.Text.Length - 1);
         }
 
         /// <summary>
@@ -67,23 +85,29 @@ namespace Conversii
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             if (currentFocusedTextBox.Text.Length == 0) return;
-            currentFocusedTextBox.Text = currentFocusedTextBox.Text.Remove(currentFocusedTextBox.Text.Length - 1);
+            delete_last_charTextBox(currentFocusedTextBox);
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
         }
 
         /// <summary>
         /// Function which changes the currentFocusedTextBox to the textBoxSecondBase
+        /// and turns OFF the buttons corresponding to the hexadecimal digits.
         /// </summary>
         private void textBoxSecondBase_Enter(object sender, EventArgs e)
         {
             currentFocusedTextBox = textBoxSecondBase;
+            turnONOFF_buttons(10);
         }
 
         /// <summary>
         /// Function which changes the currentFocusedTextBox to the textBoxResultBase
+        /// and turns OFF the buttons corresponding to the hexadecimal digits.
         /// </summary>
         private void textBoxResultBase_Enter(object sender, EventArgs e)
         {
             currentFocusedTextBox = textBoxResultBase;
+            turnONOFF_buttons(10);
         }
 
         /// <summary>
@@ -91,8 +115,355 @@ namespace Conversii
         /// </summary>
         private void button2_Click(object sender, EventArgs e)
         {
-            if (currentFocusedTextBox.Text.Length == 2) return; 
             currentFocusedTextBox.Text += "2";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds three to the end of currentFocusedTextBox 
+        /// </summary>
+        private void button3_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "3";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds four to the end of currentFocusedTextBox 
+        /// </summary>
+        private void button4_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "4";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds five to the end of currentFocusedTextBox 
+        /// </summary>
+        private void button5_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "5";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds six to the end of currentFocusedTextBox 
+        /// </summary>
+        private void button6_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "6";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds seven to the end of currentFocusedTextBox 
+        /// </summary>
+        private void button7_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "7";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds eight to the end of currentFocusedTextBox 
+        /// </summary>
+        private void button8_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "8";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds nine to the end of currentFocusedTextBox 
+        /// </summary>
+        private void button9_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "9";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Changes the arithmetic operation to addition
+        /// </summary>
+        private void buttonAdd_Click(object sender, EventArgs e)
+        {
+            operation = labelOperation.Text = "+";
+        }
+
+        /// <summary>
+        /// Changes the arithmetic operation to substraction
+        /// </summary>
+        private void buttonSubstract_Click(object sender, EventArgs e)
+        {
+            operation = labelOperation.Text = "-";
+        }
+
+        /// <summary>
+        /// Changes the arithmetic operation to multiplication
+        /// </summary>
+        private void buttonMultiply_Click(object sender, EventArgs e)
+        {
+            operation = labelOperation.Text = "*";
+        }
+
+        /// <summary>
+        /// Changes the arithmetic operation to division
+        /// </summary>
+        private void buttonDivide_Click(object sender, EventArgs e)
+        {
+            operation = labelOperation.Text = "/";
+        }
+
+        /// <summary>
+        /// Function which changes the currentFocusedTextBox to the textBoxNumber1
+        /// </summary>
+        private void textBoxNumber1_Enter(object sender, EventArgs e)
+        {
+            if (textBoxFirstBase.Text == "")
+            {
+                currentFocusedTextBox = textBoxFirstBase; // Set the focus to the Text Box referring to the base of the first number
+                return; 
+            }
+            currentFocusedTextBox = textBoxNumber1;
+            int baseNumber = Int32.Parse(textBoxFirstBase.Text);
+            turnONOFF_buttons(baseNumber);
+        }
+
+        /// <summary>
+        /// Function which changes the currentFocusedTextBox to the textBoxNumber2
+        /// </summary>
+        private void textBoxNumber2_Enter(object sender, EventArgs e)
+        {
+            if (textBoxSecondBase.Text == "")
+            {
+                currentFocusedTextBox = textBoxSecondBase; // Set the focus to the Text Box referring to the base of the second number
+                return; 
+            }
+            currentFocusedTextBox = textBoxNumber2;
+            int baseNumber = Int32.Parse(textBoxSecondBase.Text);
+            turnONOFF_buttons(baseNumber);
+        }
+
+        /// <summary>
+        /// Function that deletes the currentFocusedTextBox
+        /// </summary>
+        private void buttonClearEntry_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text = "";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function that deletes the textBoxNumber1, textBoxNumber2 and textBoxResult
+        /// </summary>
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            textBoxNumber1.Text = textBoxNumber2.Text = textBoxResult.Text = "";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function that turns ON and OFF the buttons depending on the base;
+        /// </summary>
+        /// <param name="baseNumber">The base of the number</param>
+        private void turnONOFF_buttons(int baseNumber)
+        {
+            foreach (Button button in buttons)
+                button.Enabled = false;
+            foreach (Button button in buttons.GetRange(0, baseNumber))
+                button.Enabled = true; 
+        }
+
+        /// <summary>
+        /// Function that verifies whether the content of the textBoxBase is correct or not. 
+        /// </summary>
+        /// <param name="textBox">The TextBox to be verified</param>
+        /// <returns>true if the content is correct, false otherwise</returns>
+        private bool verify_input_textBoxBase(TextBox textBox)
+        {
+            if (textBox.Text == "1") // In case the user wants to introduce the base 10/16. 
+                return true;
+            foreach (string possibleBase in possibleBases)
+                if (possibleBase == textBox.Text)
+                    return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Function that checks whether the number contains only digits (0, 1, 2, ..., 9, A, B, C, D, E, F, a, b, c, d, e, f)
+        /// </summary>
+        /// <param name="number">The number to be verified</param>
+        /// <returns>true if the number contains only digits, false otherwise</returns>
+        private bool verify_only_digits(string number)
+        {
+            string possibleDigits = "0123456789ABCDEFabcdef";
+            foreach (char digit in number)
+                if (possibleDigits.IndexOf(digit) == -1) return false;
+            return true; 
+        }
+
+        /// <summary>
+        /// Function that verifies whether the content of the textBoxNumber is correct or not.
+        /// </summary>
+        /// <param name="textBoxNumber">The TextBox to be verified</param>
+        /// <param name="texBoxBase">The TextBox which contains the base of the number</param>
+        /// <returns>true if the content is correct, false otherwise</returns>
+        private bool verify_input_textBoxNumber(TextBox textBoxNumber, TextBox textBoxBase)
+        {
+            string number = textBoxNumber.Text;
+            int baseNumber = Int32.Parse(textBoxBase.Text);
+            if (verify_only_digits(number) == false) return false; 
+            if (baseNumber == 16) return true; // The input is always correct
+            foreach (char digit in number)
+            {
+                int digit_ascii = digit - '0';
+                if (digit_ascii >= baseNumber) return false; 
+            }
+            return true; 
+        }
+
+        /// <summary>
+        /// Function that verifies whether the user is introducing correct input for the textBoxFirstBase. 
+        /// Creates a MessageBox if the input is incorrect.
+        /// </summary>
+        private void textBoxFirstBase_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxFirstBase.Text != "" && verify_input_textBoxBase(textBoxFirstBase) == false)
+            {
+                MessageBox.Show("The base has to be an element of {2, 3, ..., 10, 16}!", "Invalid base");
+                textBoxFirstBase.Text = "";
+            }
+            if (textBoxFirstBase.Text != "" && textBoxFirstBase.Text != "1" && 
+                verify_input_textBoxNumber(textBoxNumber1, textBoxFirstBase) == false) // The digits of the first number are no longer valid 
+                    textBoxNumber1.Text = "";
+            
+        }
+
+        /// <summary>
+        /// Function that verifies whether the user is introducing correct input for the textBoxSecondBase. 
+        /// Creates a MessageBox if the input is incorrect.
+        /// </summary>
+        private void textBoxSecondBase_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxSecondBase.Text != "" && verify_input_textBoxBase(textBoxSecondBase) == false)
+            {
+                MessageBox.Show("The base has to be an element of {2, 3, ..., 10, 16}!", "Invalid base");
+                textBoxSecondBase.Text = "";
+            }
+            if (textBoxSecondBase.Text != "" && textBoxSecondBase.Text != "1" &&
+                verify_input_textBoxNumber(textBoxNumber2, textBoxSecondBase) == false) // The digits of the second number are no longer valid 
+                textBoxNumber2.Text = "";
+        }
+
+        /// <summary>
+        /// Function that verifies whether the user is introducing correct input for the textBoxResultBase
+        /// Creates a MessageBox if the input is incorrect.
+        /// </summary>
+        private void textBoxResultBase_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxResultBase.Text != "" && verify_input_textBoxBase(textBoxResultBase) == false)
+            {
+                MessageBox.Show("The base has to be an element of {2, 3, ..., 10, 16}!", "Invalid base");
+                textBoxResultBase.Text = "";
+            }
+        }
+
+        /// <summary>
+        /// Function which adds the hexadecimal digit A to the end of currentFocusedTextBox 
+        /// </summary>
+        private void buttonA_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "A";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+        
+        /// <summary>
+        /// Function which adds the hexadecimal digit B to the end of currentFocusedTextBox 
+        /// </summary>
+        private void buttonE_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "E";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds the hexadecimal digit C to the end of currentFocusedTextBox 
+        /// </summary>
+        private void buttonD_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "D";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds the hexadecimal digit D to the end of currentFocusedTextBox 
+        /// </summary>
+        private void buttonF_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "F";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds the hexadecimal digit E to the end of currentFocusedTextBox 
+        /// </summary>
+        private void buttonB_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "B";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function which adds the hexadecimal digit F to the end of currentFocusedTextBox 
+        /// </summary>
+        private void buttonC_Click(object sender, EventArgs e)
+        {
+            currentFocusedTextBox.Text += "C";
+            currentFocusedTextBox.Focus();
+            currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
+        }
+
+        /// <summary>
+        /// Function that verifies whether the user is introducing correct input for the textBoxNumber1
+        /// Creates a MessageBox if the input is incorrect.
+        /// </summary>
+        private void textBoxNumber1_TextChanged(object sender, EventArgs e)
+        {
+            if (verify_input_textBoxNumber(textBoxNumber1, textBoxFirstBase) == false)
+            {
+                delete_last_charTextBox(textBoxNumber1);
+                MessageBox.Show("Incorrect digit! The base is " + textBoxFirstBase.Text + "!", "Invalid digit");
+            }
+            textBoxNumber1.Text = textBoxNumber1.Text.ToUpper();
+            textBoxNumber1.SelectionLength = 0;
+            textBoxNumber1.SelectionStart = textBoxNumber1.Text.Length;
+        }
+
+        private void textBoxNumber2_TextChanged(object sender, EventArgs e)
+        {
+            if (verify_input_textBoxNumber(textBoxNumber2, textBoxSecondBase) == false)
+            {
+                delete_last_charTextBox(textBoxNumber2);
+                MessageBox.Show("Incorrect digit! The base is " + textBoxSecondBase.Text + "!", "Invalid digit");
+            }
+            textBoxNumber2.Text = textBoxNumber2.Text.ToUpper();
+            textBoxNumber2.SelectionLength = 0;
+            textBoxNumber2.SelectionStart = textBoxNumber2.Text.Length;
         }
     }
 }
