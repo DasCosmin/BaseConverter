@@ -69,16 +69,13 @@ class Console(object):
         Function that performs multiplication of 2 numbers in a given base, hexadecimal, decimal and binary. It is used for the interprocess between Python and C#
         Input: params - a list of parameters
         Output: -
-        Raises: Exception
-            if the second number has more than 1 digits in the result base -> "Invalid number! The second number can have only one digit!\n"
         '''
         numberA, numberB, base_numberA, base_numberB, base_result = params
         result = self.__serviceNumere.multiply(numberA, numberB, base_numberA, base_numberB, base_result)
         resultHexadecimal = self.__serviceNumere.multiply(numberA, numberB, base_numberA, base_numberB, 16)
         resultDecimal = self.__serviceNumere.multiply(numberA, numberB, base_numberA, base_numberB, 10)
-        # WIP WIP WIP WIP 
-        #resultBinary = self.__serviceNumere.multiply(numberA, numberB, base_numberA, base_numberB, 2)
-        print (result.get_valoare() + "|" + resultHexadecimal.get_valoare() + "|" + resultDecimal.get_valoare() + "|2")
+        resultBinary = self.__serviceNumere.multiply(numberA, numberB, base_numberA, base_numberB, 2)
+        print (result.get_valoare() + "|" + resultHexadecimal.get_valoare() + "|" + resultDecimal.get_valoare() + "|" + resultBinary.get_valoare())
 
     def __divideProcess(self, params):
         '''
@@ -86,15 +83,17 @@ class Console(object):
         Input: params - a list of parameters
         Output: -
         Raises: Exception
-            if the second number has more than 1 digits in the result base -> "Invalid number! The second number can have only one digit!\n"
+            if the second number is zero -> "Divide by 0!\n"
         '''
         numberA, numberB, base_numberA, base_numberB, base_result = params
         quotient, remainder = self.__serviceNumere.divide(numberA, numberB, base_numberA, base_numberB, base_result)
-        quotientHexadecimal, remainderHexadecimal = self.__serivceNumere.divide(numberA, numberB, base_numberA, base_numberB, base_result)
-        quotientDecimal, remainderDecimal = self.__serviceNumere.divide(numberA, numberB, base_numberA, base_numberB, base_result)
-        quotientBinary, remainderBinary = self.__serviceNumere.divide(numberA, numberB, base_numberA, base_numberB, base_result)
-        print (quotient.get_valoare() + " .r " + remainder.get_valoare() + "|" + quotientHexadecimal.get_valoare() + " .r " + remainderHexadecimal.get_valoare() +
-            "|" + quotientDecimal.get_valoare() + " .r " + remainderDecimal.get_valoare() + "|" + quotientBinary.get_valoare() + " .r " + remainderBinary.get_valoare())
+        quotientHexadecimal, remainderHexadecimal = self.__serviceNumere.divide(numberA, numberB, base_numberA, base_numberB, 16)
+        quotientDecimal, remainderDecimal = self.__serviceNumere.divide(numberA, numberB, base_numberA, base_numberB, 10)
+        quotientBinary, remainderBinary = self.__serviceNumere.divide(numberA, numberB, base_numberA, base_numberB, 2)
+        print(quotient.get_valoare() + " .r " + remainder.get_valoare() + "|" +
+              quotientHexadecimal.get_valoare() + " .r " + remainderHexadecimal.get_valoare() + "|" + 
+              quotientDecimal.get_valoare() + " .r " + remainderDecimal.get_valoare() + "|" + 
+              quotientBinary.get_valoare() + " .r " + remainderBinary.get_valoare())
 
     def __substract(self, params):   
         '''
@@ -203,7 +202,13 @@ class Console(object):
         Input: - 
         Output: -
         '''
+        print("""Autor: Dascalu Cosmin-Andrei, Specializarea Informatica Romana, Nivel licenta, an 1, grupa 212
         
+Programul permite utilizatorului sa introduca, pe rand, o operatie aritmetica de baza, 
+3 numere intregi, pozitive, reprezentand bazele de numeratie ale celor 2 numere, 
+respectiv baza de numeratie in care se va efectua calculul, cat si cele 2 numere in bazele date.
+Toate datele de intrare se valideaza! 
+""")
         while True: 
             # Citirea operatiei aritmetice: 
             operatie = input("\n--Introduceti o operatie aritmetica de baza: +, -, *, /:  ") 

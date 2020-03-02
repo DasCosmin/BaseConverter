@@ -22,14 +22,13 @@ class Validator(object):
                operatie - un caracter 
         Output: - 
         Raises: Exception
-            daca operatia este '*' sau '/' si numarB are mai mult de o cifra 
-                -> "Numar nevalid! Al doilea numar trebuie sa aiba o singura cifra!\n"
-            daca operatia este '-' si numarA < numarB -> "Scadere negativa!\n"
+            if operations is '/' and the second number is 0 -> "Divide by 0!\n"
+            if operation is '-' and the second number is bigger than the first number -> "Scadere negativa!\n"
         '''
         erori = ''
-        if operatie == '*' or operatie == '/': 
-            if len(numarB.get_valoare()) > 1: 
-                erori += "Numar nevalid! Al doilea numar trebuie sa aiba o singura cifra!\n"
+        if operatie == '/': 
+            if numarB.get_valoare() == '0': 
+                erori += "Divide by 0!\n"
         elif operatie == '-': 
             if len(numarA.get_valoare()) < len(numarB.get_valoare()):
                 erori += "Scadere negativa!\n"

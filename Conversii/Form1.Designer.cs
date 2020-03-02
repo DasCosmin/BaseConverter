@@ -477,6 +477,7 @@
             // 
             this.labelPlaceholder.AutoSize = true;
             this.labelPlaceholder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPlaceholder.ForeColor = System.Drawing.Color.Gold;
             this.labelPlaceholder.Location = new System.Drawing.Point(-36, 223);
             this.labelPlaceholder.Name = "labelPlaceholder";
             this.labelPlaceholder.Size = new System.Drawing.Size(967, 13);

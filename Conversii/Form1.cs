@@ -472,61 +472,68 @@ namespace Conversii
 
         private void buttoneEqual_Click(object sender, EventArgs e)
         {
-            // Determine the path of the Directory where the Python Interpreter and the Python App are located 
-            string path = Directory.GetCurrentDirectory();
-            int position = path.IndexOf(@"\bin\Debug");
-            path = path.Remove(position);
+            try
+            {
+                // Determine the path of the Directory where the Python Interpreter and the Python App are located 
+                string path = Directory.GetCurrentDirectory();
+                int position = path.IndexOf(@"\bin\Debug");
+                path = path.Remove(position);
 
-            // Full path of Python Interpreter 
-            string python = path + @"\Python\Python37\python.exe";
+                // Full path of Python Interpreter 
+                string python = path + @"\Python\Python37\python.exe";
 
-            // Full path of Python App for conversion
-            string myPythonApp = path + @"\ConversionOperations\main.py";
+                // Full path of Python App for conversion
+                string myPythonApp = path + @"\ConversionOperations\main.py";
 
-            // Parameters to be sent to the script 
-            string numberA = textBoxNumber1.Text;
-            string numberB = textBoxNumber2.Text;
-            int base_numberA = Int32.Parse(textBoxFirstBase.Text);
-            int base_numberB = Int32.Parse(textBoxSecondBase.Text);
-            int base_result = Int32.Parse(textBoxResultBase.Text);
+                // Parameters to be sent to the script 
+                string numberA = textBoxNumber1.Text;
+                string numberB = textBoxNumber2.Text;
+                int base_numberA = Int32.Parse(textBoxFirstBase.Text);
+                int base_numberB = Int32.Parse(textBoxSecondBase.Text);
+                int base_result = Int32.Parse(textBoxResultBase.Text);
 
-            // Create new process start info 
-            ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(python);
+                // Create new process start info 
+                ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(python);
 
-            // Make sure the output can be read from stdout 
-            myProcessStartInfo.UseShellExecute = false;
-            myProcessStartInfo.RedirectStandardOutput = true;
-            myProcessStartInfo.CreateNoWindow = true;
+                // Make sure the output can be read from stdout 
+                myProcessStartInfo.UseShellExecute = false;
+                myProcessStartInfo.RedirectStandardOutput = true;
+                myProcessStartInfo.CreateNoWindow = true;
 
-            // Start Python App with 7 arguments  
-            // 1st arguments is pointer to itself,  
-            // the rest are the actual arguments to be sent. 
-            myProcessStartInfo.Arguments = myPythonApp + " " + operation + " " + base_numberA + " " + base_numberB + " " + base_result + " " +
-                numberA + " " + numberB;
+                // Start Python App with 7 arguments  
+                // 1st arguments is pointer to itself,  
+                // the rest are the actual arguments to be sent. 
+                myProcessStartInfo.Arguments = myPythonApp + " " + operation + " " + base_numberA + " " + base_numberB + " " + base_result + " " +
+                    numberA + " " + numberB;
 
-            Process myProcess = new Process();
-            // Assign start information to the process 
-            myProcess.StartInfo = myProcessStartInfo;
+                Process myProcess = new Process();
+                // Assign start information to the process 
+                myProcess.StartInfo = myProcessStartInfo;
 
-            // Start the process 
-            myProcess.Start();
+                // Start the process 
+                myProcess.Start();
 
-            // Read the standard output of the Python App.  
-            // In order to avoid deadlock it will read output first 
-            // and then wait for process to terminate: 
-            StreamReader myStreamReader = myProcess.StandardOutput;
-            string finalResults = myStreamReader.ReadLine();
-            string[] results = finalResults.Split('|');
+                // Read the standard output of the Python App.  
+                // In order to avoid deadlock it will read output first 
+                // and then wait for process to terminate: 
+                StreamReader myStreamReader = myProcess.StandardOutput;
+                string finalResults = myStreamReader.ReadLine();
+                string[] results = finalResults.Split('|'); // | is used as a delimiter between the 4 results
 
-            // Wait for exit signal from the Python App and then close it. 
-            myProcess.WaitForExit();
-            myProcess.Close();
+                // Wait for exit signal from the Python App and then close it. 
+                myProcess.WaitForExit();
+                myProcess.Close();
 
-            // Update textBoxes
-            textBoxResult.Text = results[0];
-            textBoxHEX.Text = results[1];
-            textBoxDEC.Text = results[2];
-            textBoxBIN.Text = results[3];
+                // Update textBoxes
+                textBoxResult.Text = results[0];
+                textBoxHEX.Text = results[1];
+                textBoxDEC.Text = results[2];
+                textBoxBIN.Text = results[3];
+            }
+            catch (IndexOutOfRangeException)
+            {
+
+            }
         }
     }
 }

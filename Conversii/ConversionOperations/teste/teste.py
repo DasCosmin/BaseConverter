@@ -7,6 +7,8 @@ from infrastrctura.repos import Repo
 from erori.exceptii import RepoError, ValidError
 from business.services import ServiceNumere
 from valid.validatoare import Validator
+
+
 class Teste(object):
     
     def __init__(self):
@@ -66,6 +68,11 @@ class Teste(object):
         numarB = Numar('65', 10)
         rezultat = repo.add(numarA, numarB, 10)
         assert rezultat.get_valoare() == '1300'
+        
+        numarA = Numar('', 10)
+        numarB = Numar('6', 10)
+        rezultat = repo.add(numarA, numarB, 10)
+        assert rezultat.get_valoare() == '6'
 
     def __test_repo_multiply(self):
         '''
@@ -97,6 +104,21 @@ class Teste(object):
         numarB = Numar('0', 10)
         rezultat = repo.multiply(numarA, numarB, 10)
         assert rezultat.get_valoare() == '0'
+        
+        numarA = Numar('10', 10)
+        numarB = Numar('10', 10)
+        rezultat = repo.multiply(numarA, numarB, 10)
+        assert rezultat.get_valoare() == '100'
+        
+        numarA = Numar('34', 5)
+        numarB = Numar('12', 5)
+        rezultat = repo.multiply(numarA, numarB, 5)
+        assert rezultat.get_valoare() == '1013'
+        
+        numarA = Numar('1010', 2)
+        numarB = Numar('11101', 2)
+        rezultat = repo.multiply(numarA, numarB, 2)
+        assert rezultat.get_valoare() == '100100010'
 
     def __test_repo_substract(self):
         '''
@@ -170,6 +192,28 @@ class Teste(object):
         assert cat.get_baza() == 16
         assert rest.get_valoare() == '9'
         assert rest.get_baza() == 16
+        
+        numberA = Numar('100', 10)
+        numberB = Numar('10', 10)
+        quotient, remainder = repo.divide(numberA, numberB, 10)
+        assert quotient.get_valoare() == '10'
+        assert quotient.get_baza() == 10
+        assert remainder.get_valoare() == '0'
+        assert remainder.get_baza() == 10
+        
+        numberA = Numar('325', 10)
+        numberB = Numar('17', 10)
+        quotient, remainder = repo.divide(numberA, numberB, 10)
+        assert quotient.get_valoare() == '19'
+        assert remainder.get_valoare() == '2'
+        
+        numberA = Numar('1111', 2)
+        numberB = Numar('100', 2)
+        quotient, remainder = repo.divide(numberA, numberB, 2)
+        assert quotient.get_valoare() == '11'
+        assert quotient.get_baza() == 2
+        assert remainder.get_valoare() == '11'
+        assert remainder.get_baza() == 2
 
     def __test_repo_subtitutie(self):
         '''
@@ -455,23 +499,17 @@ class Teste(object):
         assert rezultat.get_valoare() == '12C'
         assert rezultat.get_baza() == 16 
         
-        try: 
-            rezultat = serviceNumere.multiply('120', '3', 10, 4, 2)
-            assert False 
-        except RepoError as re: 
-            assert str(re) == "Numar nevalid! Al doilea numar trebuie sa aiba o singura cifra!\n"
+        rezultat = serviceNumere.multiply('120', '3', 10, 4, 2)
+        assert rezultat.get_valoare() == '101101000'
+        assert rezultat.get_baza() == 2
+          
+        rezultat = serviceNumere.multiply('120', '15', 10, 6, 10)
+        assert rezultat.get_valoare() == '1320'
+        assert rezultat.get_baza() == 10
         
-        try: 
-            rezultat = serviceNumere.multiply('120', '15', 10, 6, 10)
-            assert False
-        except RepoError as re:  
-            assert str(re) == "Numar nevalid! Al doilea numar trebuie sa aiba o singura cifra!\n"
-        
-        try: 
-            rezultat = serviceNumere.multiply('20', 'F', 10, 16, 10)
-            assert False 
-        except RepoError as re:  
-            assert str(re) == "Numar nevalid! Al doilea numar trebuie sa aiba o singura cifra!\n"
+        rezultat = serviceNumere.multiply('20', 'F', 10, 16, 9)
+        assert rezultat.get_valoare() == '363'
+        assert rezultat.get_baza() == 9
          
     def __test_service_substract(self):
         '''
@@ -533,17 +571,23 @@ class Teste(object):
         assert rest.get_valoare() == '1'
         assert cat.get_baza() == 16
         
+        quotient, remainder = serviceNumere.divide('20', '8', 7, 9, 2)
+        assert quotient.get_valoare() == '1'
+        assert quotient.get_baza() == 2
+        assert remainder.get_valoare() == '110'
+        assert remainder.get_baza() == 2
+        
+        quotient, remainder = serviceNumere.divide('37E', '78', 16, 9, 16)
+        assert quotient.get_valoare() == 'C'
+        assert quotient.get_baza() == 16
+        assert remainder.get_valoare() == '2A'
+        assert remainder.get_baza() == 16
+       
         try: 
-            cat, rest = serviceNumere.divide('20', '8', 7, 9, 2)
+            quotient, remainder = serviceNumere.divide('120', '0', 3, 8, 10)
             assert False 
         except RepoError as re: 
-            assert str(re) == "Numar nevalid! Al doilea numar trebuie sa aiba o singura cifra!\n"
-        
-        try: 
-            cat, rest = serviceNumere.divide('37E', '78', 16, 9, 16)
-            assert False
-        except RepoError as re: 
-            assert str(re) == "Numar nevalid! Al doilea numar trebuie sa aiba o singura cifra!\n"
+            assert str(re) == "Divide by 0!\n" 
         
     def __test_validator_valideaza_numar(self):
         '''

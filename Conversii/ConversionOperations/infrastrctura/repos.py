@@ -67,32 +67,51 @@ class Repo(object):
                baza - un numar intreg, pozitiv 
         Output: un obiect de tip Numar 
         '''
-        self.__stNumber = stNumber
-        self.__ndNumber = ndNumber
         self.__baza = baza 
         
-        if (self.__ndNumber.get_valoare() == '0'):
+        if (stNumber.get_valoare() == '0' or ndNumber.get_valoare() == '0'):
             return Numar('0', self.__baza)
         
-        rezultatNumber_value = ''
+        intermediaryResult_value = ''
+        finalResult_value = ''
         carryDigit = 0
-        for index in range(len(self.__stNumber.get_valoare()) - 1, -1, -1):
-            # Convertim cele mai din dreapta cifre ale celor doua numere la integer. 
-            digit_stNumber = character_to_decimal[self.__stNumber.get_valoare()[index]]
-            digit_ndNumber = character_to_decimal[self.__ndNumber.get_valoare()[0]]
-            
-            rezultat_inmultire = digit_stNumber * digit_ndNumber + carryDigit
-            digit_rezultat = rezultat_inmultire % self.__baza
-            carryDigit = rezultat_inmultire // self.__baza
-            
-            character_rezultat = decimal_to_character[digit_rezultat]  # Transformam cifra in caracter
-            rezultatNumber_value = character_rezultat + rezultatNumber_value
-        # Verificam daca a mai ramas o cifra de transport 
-        if carryDigit != 0: 
-            character_rezultat = decimal_to_character[carryDigit]  # Transformam cifra in caracter
-            rezultatNumber_value = character_rezultat + rezultatNumber_value
+        numberOfDigits_stNumber = len(stNumber.get_valoare())
+        numberOfDigits_ndNumber = len(ndNumber.get_valoare())
+        firstNumber = stNumber.get_valoare()
+        secondNumber = ndNumber.get_valoare()
         
-        return Numar(rezultatNumber_value, self.__baza)
+        for index_SecondNumber in range (numberOfDigits_ndNumber - 1, -1, -1):
+            for index_FirstNumber in range(numberOfDigits_stNumber - 1, -1, -1):
+                # Convert rightmost digits to decimal
+                digit_stNumber = character_to_decimal[firstNumber[index_FirstNumber]]
+                digit_ndNumber = character_to_decimal[secondNumber[index_SecondNumber]]
+                
+                result_Multplication = digit_stNumber * digit_ndNumber + carryDigit
+                digit_result = result_Multplication % self.__baza
+                carryDigit = result_Multplication // self.__baza
+                
+                character_result = decimal_to_character[digit_result]  # Digit to character
+                intermediaryResult_value = character_result + intermediaryResult_value
+            
+            # Check for carry digit
+            if carryDigit != 0: 
+                character_result = decimal_to_character[carryDigit]  # Digit to character
+                intermediaryResult_value = character_result + intermediaryResult_value    
+                carryDigit = 0
+            
+            if numberOfDigits_ndNumber >= 2:  # Multidigit Multiplication, then add an extra zero to the end of the final result
+                intermediaryResult_value = intermediaryResult_value + (numberOfDigits_ndNumber - index_SecondNumber - 1) * '0'
+            
+            # Perform a simple addition between the final result and the intermediary result
+            dummy_FirstNumber = Numar(finalResult_value, self.__baza)
+            dummy_SecondNumber = Numar(intermediaryResult_value, self.__baza) 
+            dummy_ResultNumber = self.add(dummy_FirstNumber, dummy_SecondNumber, self.__baza)
+            finalResult_value = dummy_ResultNumber.get_valoare()  # Update the final result
+                
+            # Update the intermediary result
+            intermediaryResult_value = '' 
+        
+        return Numar(finalResult_value, self.__baza)
 
     def substract(self, stNumber, ndNumber, baza):
         '''
@@ -137,49 +156,41 @@ class Repo(object):
             rezultatNumber_value = rezultatNumber_value[1:]
         return Numar(rezultatNumber_value, self.__baza)
     
-    def divide(self, stNumber, ndNumber, baza):
+    def division_decimalBase(self, stNumber, ndNumber):
+        '''
+        Function that divides two numbers in base 10 
+        Input: stNumber, ndNumber - entities of type Numar, with decimal base 
+        Output: two objects of type Numar, one representing the quotient, while the other representing the remainder, both in base 10
+        '''
+        self.__stNumber = stNumber
+        self.__ndNumber = ndNumber
+        quotient = int(self.__stNumber.get_valoare()) // int(self.__ndNumber.get_valoare())
+        remainder = int(self.__stNumber.get_valoare()) % int(self.__ndNumber.get_valoare())
+        return Numar(str(quotient), 10), Numar(str(remainder), 10)
+    
+    def divide(self, stNumber, ndNumber, base):
         '''
         Functie care inmulteste doua numere intr-o anumita baza
         Input: stNumber - un obiect de tip Numar
                ndNumber - un obiect de tip Numar
-               baza - un numar intreg, pozitiv 
+               base - un numar intreg, pozitiv 
         Output: doua obiecte de tip Numar, primul reprezentand catul impartirii, iar al doilea restul 
         '''
         self.__stNumber = stNumber
         self.__ndNumber = ndNumber
-        self.__baza = baza 
-        catNumber_value = ''
-        factor = 0
-        for index in range(len(self.__stNumber.get_valoare())):
-            # Convertim cifra primului numar la integer 
-            digit_stNumber = character_to_decimal[self.__stNumber.get_valoare()[index]]
-            
-            # Convertim al doilea numar la integer
-            digit_ndNumber = character_to_decimal[self.__ndNumber.get_valoare()[0]]
-            
-            rezultat = factor * self.__baza + digit_stNumber
-            
-            # Cifra actuala a catului va fi rezultat // digit_ndNumber 
-            cifra_cat = rezultat // digit_ndNumber
-            
-            # Convertim cifra catului la caracter
-            character_rezultat = decimal_to_character[cifra_cat]
-            
-            # Actualizam catul 
-            catNumber_value = catNumber_value + character_rezultat 
-            
-            # Actualizam factorul, acesta ia valoarea restului impartirii rezultat // digit_ndNumber
-            factor = rezultat % digit_ndNumber
-        # Restul imparitirii va fi ultimul rest ramas
-        cifra_rest = factor 
-        character_rezultat = decimal_to_character[cifra_rest] 
-        restNumber_value = character_rezultat
         
-        # Elimin zerourile din fata numarului 
-        while catNumber_value[0] == '0':
-            catNumber_value = catNumber_value[1:]
+        # Convert both numbers to base 10 
+        self.__stNumber = self.convert_to_another_base(self.__stNumber, 10)
+        self.__ndNumber = self.convert_to_another_base(self.__ndNumber, 10)
         
-        return Numar(catNumber_value, self.__baza), Numar(restNumber_value, self.__baza)
+        # Now that they're both in decimal base, perform simple division between them
+        quotient, remainder = self.division_decimalBase(self.__stNumber, self.__ndNumber)
+        
+        # Now, convert the quotient and remainder to the given base 
+        quotient = self.convert_to_another_base(quotient, base)
+        remainder = self.convert_to_another_base(remainder, base)
+        
+        return quotient, remainder
 
     def convert_subtitutie(self, number):
         '''
@@ -215,6 +226,9 @@ class Repo(object):
             raise RepoError("Baza nevalida!\n")
         
         rezultatNumber_value = ''
+        if self.__number.get_valoare() == '0':
+            return Numar('0', baza)
+        
         while self.__number.get_valoare() != '0': 
             number_value_integer = int(self.__number.get_valoare())
             digit = number_value_integer % baza 
