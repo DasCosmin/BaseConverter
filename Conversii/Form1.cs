@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +18,7 @@ namespace Conversii
         public List<Button> buttons;
 
         private TextBox currentFocusedTextBox;
-        private string operation;
+        private string operation = "+";
 
         /// <summary>
         /// The constructor of the FormCalculator class
@@ -41,10 +43,10 @@ namespace Conversii
         /// Function which changes the currentFocusedTextBox to the textBoxFirstBase
         /// and turns OFF the buttons corresponding to the hexadecimal digits. 
         /// </summary>
-        private void textBoxFirstBase_Enter(object sender, EventArgs e)
+        private void TextBoxFirstBase_Enter(object sender, EventArgs e)
         {
             currentFocusedTextBox = textBoxFirstBase;
-            turnONOFF_buttons(10);
+            TurnOnOffButtons(10);
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace Conversii
         /// Function that deletes the last character of a TextBox
         /// </summary>
         /// <param name="textBox">The TextBox to delete the last character for</param>
-        private void delete_last_charTextBox(TextBox textBox)
+        private void DeleteLastCharTextBox(TextBox textBox)
         {
             textBox.Text = textBox.Text.Remove(textBox.Text.Length - 1);
         }
@@ -85,7 +87,7 @@ namespace Conversii
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             if (currentFocusedTextBox.Text.Length == 0) return;
-            delete_last_charTextBox(currentFocusedTextBox);
+            DeleteLastCharTextBox(currentFocusedTextBox);
             currentFocusedTextBox.Focus();
             currentFocusedTextBox.SelectionStart = currentFocusedTextBox.Text.Length;
         }
@@ -97,7 +99,7 @@ namespace Conversii
         private void textBoxSecondBase_Enter(object sender, EventArgs e)
         {
             currentFocusedTextBox = textBoxSecondBase;
-            turnONOFF_buttons(10);
+            TurnOnOffButtons(10);
         }
 
         /// <summary>
@@ -107,7 +109,7 @@ namespace Conversii
         private void textBoxResultBase_Enter(object sender, EventArgs e)
         {
             currentFocusedTextBox = textBoxResultBase;
-            turnONOFF_buttons(10);
+            TurnOnOffButtons(10);
         }
 
         /// <summary>
@@ -234,7 +236,7 @@ namespace Conversii
             }
             currentFocusedTextBox = textBoxNumber1;
             int baseNumber = Int32.Parse(textBoxFirstBase.Text);
-            turnONOFF_buttons(baseNumber);
+            TurnOnOffButtons(baseNumber);
         }
 
         /// <summary>
@@ -249,7 +251,7 @@ namespace Conversii
             }
             currentFocusedTextBox = textBoxNumber2;
             int baseNumber = Int32.Parse(textBoxSecondBase.Text);
-            turnONOFF_buttons(baseNumber);
+            TurnOnOffButtons(baseNumber);
         }
 
         /// <summary>
@@ -276,7 +278,7 @@ namespace Conversii
         /// Function that turns ON and OFF the buttons depending on the base;
         /// </summary>
         /// <param name="baseNumber">The base of the number</param>
-        private void turnONOFF_buttons(int baseNumber)
+        private void TurnOnOffButtons(int baseNumber)
         {
             foreach (Button button in buttons)
                 button.Enabled = false;
@@ -289,7 +291,7 @@ namespace Conversii
         /// </summary>
         /// <param name="textBox">The TextBox to be verified</param>
         /// <returns>true if the content is correct, false otherwise</returns>
-        private bool verify_input_textBoxBase(TextBox textBox)
+        private bool VerifyInputTextBoxBase(TextBox textBox)
         {
             if (textBox.Text == "1") // In case the user wants to introduce the base 10/16. 
                 return true;
@@ -304,7 +306,7 @@ namespace Conversii
         /// </summary>
         /// <param name="number">The number to be verified</param>
         /// <returns>true if the number contains only digits, false otherwise</returns>
-        private bool verify_only_digits(string number)
+        private bool VerifyOnlyDigits(string number)
         {
             string possibleDigits = "0123456789ABCDEFabcdef";
             foreach (char digit in number)
@@ -318,11 +320,11 @@ namespace Conversii
         /// <param name="textBoxNumber">The TextBox to be verified</param>
         /// <param name="texBoxBase">The TextBox which contains the base of the number</param>
         /// <returns>true if the content is correct, false otherwise</returns>
-        private bool verify_input_textBoxNumber(TextBox textBoxNumber, TextBox textBoxBase)
+        private bool VerifyInputTextBoxNumber(TextBox textBoxNumber, TextBox textBoxBase)
         {
             string number = textBoxNumber.Text;
             int baseNumber = Int32.Parse(textBoxBase.Text);
-            if (verify_only_digits(number) == false) return false; 
+            if (VerifyOnlyDigits(number) == false) return false; 
             if (baseNumber == 16) return true; // The input is always correct
             foreach (char digit in number)
             {
@@ -338,13 +340,13 @@ namespace Conversii
         /// </summary>
         private void textBoxFirstBase_TextChanged(object sender, EventArgs e)
         {
-            if (textBoxFirstBase.Text != "" && verify_input_textBoxBase(textBoxFirstBase) == false)
+            if (textBoxFirstBase.Text != "" && VerifyInputTextBoxBase(textBoxFirstBase) == false)
             {
                 MessageBox.Show("The base has to be an element of {2, 3, ..., 10, 16}!", "Invalid base");
                 textBoxFirstBase.Text = "";
             }
             if (textBoxFirstBase.Text != "" && textBoxFirstBase.Text != "1" && 
-                verify_input_textBoxNumber(textBoxNumber1, textBoxFirstBase) == false) // The digits of the first number are no longer valid 
+                VerifyInputTextBoxNumber(textBoxNumber1, textBoxFirstBase) == false) // The digits of the first number are no longer valid 
                     textBoxNumber1.Text = "";
             
         }
@@ -355,13 +357,13 @@ namespace Conversii
         /// </summary>
         private void textBoxSecondBase_TextChanged(object sender, EventArgs e)
         {
-            if (textBoxSecondBase.Text != "" && verify_input_textBoxBase(textBoxSecondBase) == false)
+            if (textBoxSecondBase.Text != "" && VerifyInputTextBoxBase(textBoxSecondBase) == false)
             {
                 MessageBox.Show("The base has to be an element of {2, 3, ..., 10, 16}!", "Invalid base");
                 textBoxSecondBase.Text = "";
             }
             if (textBoxSecondBase.Text != "" && textBoxSecondBase.Text != "1" &&
-                verify_input_textBoxNumber(textBoxNumber2, textBoxSecondBase) == false) // The digits of the second number are no longer valid 
+                VerifyInputTextBoxNumber(textBoxNumber2, textBoxSecondBase) == false) // The digits of the second number are no longer valid 
                 textBoxNumber2.Text = "";
         }
 
@@ -371,7 +373,7 @@ namespace Conversii
         /// </summary>
         private void textBoxResultBase_TextChanged(object sender, EventArgs e)
         {
-            if (textBoxResultBase.Text != "" && verify_input_textBoxBase(textBoxResultBase) == false)
+            if (textBoxResultBase.Text != "" && VerifyInputTextBoxBase(textBoxResultBase) == false)
             {
                 MessageBox.Show("The base has to be an element of {2, 3, ..., 10, 16}!", "Invalid base");
                 textBoxResultBase.Text = "";
@@ -444,26 +446,87 @@ namespace Conversii
         /// </summary>
         private void textBoxNumber1_TextChanged(object sender, EventArgs e)
         {
-            if (verify_input_textBoxNumber(textBoxNumber1, textBoxFirstBase) == false)
+            if (VerifyInputTextBoxNumber(textBoxNumber1, textBoxFirstBase) == false)
             {
-                delete_last_charTextBox(textBoxNumber1);
+                DeleteLastCharTextBox(textBoxNumber1);
                 MessageBox.Show("Incorrect digit! The base is " + textBoxFirstBase.Text + "!", "Invalid digit");
             }
             textBoxNumber1.Text = textBoxNumber1.Text.ToUpper();
             textBoxNumber1.SelectionLength = 0;
             textBoxNumber1.SelectionStart = textBoxNumber1.Text.Length;
+            textBoxHEX.Text = textBoxDEC.Text = textBoxBIN.Text = textBoxResult.Text = "";
         }
 
         private void textBoxNumber2_TextChanged(object sender, EventArgs e)
         {
-            if (verify_input_textBoxNumber(textBoxNumber2, textBoxSecondBase) == false)
+            if (VerifyInputTextBoxNumber(textBoxNumber2, textBoxSecondBase) == false)
             {
-                delete_last_charTextBox(textBoxNumber2);
+                DeleteLastCharTextBox(textBoxNumber2);
                 MessageBox.Show("Incorrect digit! The base is " + textBoxSecondBase.Text + "!", "Invalid digit");
             }
             textBoxNumber2.Text = textBoxNumber2.Text.ToUpper();
             textBoxNumber2.SelectionLength = 0;
             textBoxNumber2.SelectionStart = textBoxNumber2.Text.Length;
+            textBoxHEX.Text = textBoxDEC.Text = textBoxBIN.Text = textBoxResult.Text = "";
+        }
+
+        private void buttoneEqual_Click(object sender, EventArgs e)
+        {
+            // Determine the path of the Directory where the Python Interpreter and the Python App are located 
+            string path = Directory.GetCurrentDirectory();
+            int position = path.IndexOf(@"\bin\Debug");
+            path = path.Remove(position);
+
+            // Full path of Python Interpreter 
+            string python = path + @"\Python\Python37\python.exe";
+
+            // Full path of Python App for conversion
+            string myPythonApp = path + @"\ConversionOperations\main.py";
+
+            // Parameters to be sent to the script 
+            string numberA = textBoxNumber1.Text;
+            string numberB = textBoxNumber2.Text;
+            int base_numberA = Int32.Parse(textBoxFirstBase.Text);
+            int base_numberB = Int32.Parse(textBoxSecondBase.Text);
+            int base_result = Int32.Parse(textBoxResultBase.Text);
+
+            // Create new process start info 
+            ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(python);
+
+            // Make sure the output can be read from stdout 
+            myProcessStartInfo.UseShellExecute = false;
+            myProcessStartInfo.RedirectStandardOutput = true;
+            myProcessStartInfo.CreateNoWindow = true;
+
+            // Start Python App with 7 arguments  
+            // 1st arguments is pointer to itself,  
+            // the rest are the actual arguments to be sent. 
+            myProcessStartInfo.Arguments = myPythonApp + " " + operation + " " + base_numberA + " " + base_numberB + " " + base_result + " " +
+                numberA + " " + numberB;
+
+            Process myProcess = new Process();
+            // Assign start information to the process 
+            myProcess.StartInfo = myProcessStartInfo;
+
+            // Start the process 
+            myProcess.Start();
+
+            // Read the standard output of the Python App.  
+            // In order to avoid deadlock it will read output first 
+            // and then wait for process to terminate: 
+            StreamReader myStreamReader = myProcess.StandardOutput;
+            string finalResults = myStreamReader.ReadLine();
+            string[] results = finalResults.Split('|');
+
+            // Wait for exit signal from the Python App and then close it. 
+            myProcess.WaitForExit();
+            myProcess.Close();
+
+            // Update textBoxes
+            textBoxResult.Text = results[0];
+            textBoxHEX.Text = results[1];
+            textBoxDEC.Text = results[2];
+            textBoxBIN.Text = results[3];
         }
     }
 }

@@ -143,6 +143,7 @@
             this.buttoneEqual.TabIndex = 6;
             this.buttoneEqual.Text = " =";
             this.buttoneEqual.UseVisualStyleBackColor = false;
+            this.buttoneEqual.Click += new System.EventHandler(this.buttoneEqual_Click);
             // 
             // buttonAdd
             // 
@@ -490,7 +491,7 @@
             this.textBoxFirstBase.Size = new System.Drawing.Size(25, 20);
             this.textBoxFirstBase.TabIndex = 0;
             this.textBoxFirstBase.TextChanged += new System.EventHandler(this.textBoxFirstBase_TextChanged);
-            this.textBoxFirstBase.Enter += new System.EventHandler(this.textBoxFirstBase_Enter);
+            this.textBoxFirstBase.Enter += new System.EventHandler(this.TextBoxFirstBase_Enter);
             // 
             // textBoxSecondBase
             // 
@@ -605,36 +606,36 @@
             // 
             // textBoxResult
             // 
-            this.textBoxResult.Enabled = false;
             this.textBoxResult.Location = new System.Drawing.Point(297, 86);
             this.textBoxResult.Name = "textBoxResult";
+            this.textBoxResult.ReadOnly = true;
             this.textBoxResult.Size = new System.Drawing.Size(193, 20);
             this.textBoxResult.TabIndex = 45;
             this.textBoxResult.TabStop = false;
             // 
             // textBoxHEX
             // 
-            this.textBoxHEX.Enabled = false;
             this.textBoxHEX.Location = new System.Drawing.Point(63, 131);
             this.textBoxHEX.Name = "textBoxHEX";
+            this.textBoxHEX.ReadOnly = true;
             this.textBoxHEX.Size = new System.Drawing.Size(161, 20);
             this.textBoxHEX.TabIndex = 46;
             this.textBoxHEX.TabStop = false;
             // 
             // textBoxDEC
             // 
-            this.textBoxDEC.Enabled = false;
             this.textBoxDEC.Location = new System.Drawing.Point(63, 155);
             this.textBoxDEC.Name = "textBoxDEC";
+            this.textBoxDEC.ReadOnly = true;
             this.textBoxDEC.Size = new System.Drawing.Size(161, 20);
             this.textBoxDEC.TabIndex = 47;
             this.textBoxDEC.TabStop = false;
             // 
             // textBoxBIN
             // 
-            this.textBoxBIN.Enabled = false;
             this.textBoxBIN.Location = new System.Drawing.Point(63, 177);
             this.textBoxBIN.Name = "textBoxBIN";
+            this.textBoxBIN.ReadOnly = true;
             this.textBoxBIN.Size = new System.Drawing.Size(161, 20);
             this.textBoxBIN.TabIndex = 48;
             this.textBoxBIN.TabStop = false;
@@ -695,6 +696,7 @@
             this.Controls.Add(this.button0);
             this.Controls.Add(this.buttonA);
             this.Controls.Add(this.buttonB);
+            this.MaximizeBox = false;
             this.Name = "FormCalculator";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
