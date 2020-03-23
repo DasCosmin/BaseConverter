@@ -20,8 +20,8 @@ During the development of this project I have learned a lot about processes betw
 ![Application Shortcut](https://imgur.com/RQKJdlB.png)
 
 ## Technologies
-* Python 3.8, IDE used: Pycharm - version 1.0
-* Python 3.8 + .NET (C#), IDEs used: Pycharm + VS 2019 - version 2.0
+* Python 3.7, IDE used: Pycharm - version 1.0
+* Python 3.7 + .NET (C#), IDEs used: Pycharm + VS 2019 - version 2.0
 
 ## Setup
 In order to run the program, clone this repo and install Visual Studio 2019 (or 2015/2017) and 
